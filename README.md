@@ -23,4 +23,6 @@ This project is fully static. Deploy the folder contents to any static host:
 
 The public entry file is `index.html`.
 
+Deployment pipeline verified from Codex.
+
 You do not need to run `server.ps1` online; it is only for local testing.
