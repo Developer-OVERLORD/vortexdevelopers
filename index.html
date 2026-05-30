@@ -1,0 +1,292 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vortex 8-Ball Pool | Premium Billiards Experience</title>
+    <meta name="description" content="Play high-fidelity 8-Ball Pool with realistic physics, cyber-lounge visual design, AI opponents, custom cues, and synthesized audio.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- CSS Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <!-- BACKGROUND AMBIENT NEON GLOWS -->
+        <div class="ambient-glow bg-glow-1"></div>
+        <div class="ambient-glow bg-glow-2"></div>
+
+        <!-- MAIN LOBBY SCREEN -->
+        <section id="lobbyScreen" class="screen active">
+            <header class="lobby-header">
+                <div class="logo-container">
+                    <span class="logo-accent">VORTEX</span>
+                    <span class="logo-main">8-BALL POOL</span>
+                </div>
+                <div class="player-profile-widget" id="lobbyProfileWidget">
+                    <div class="avatar-container">
+                        <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%236c5ce7'/><text x='50' y='60' font-size='35' font-family='sans-serif' font-weight='bold' fill='white' text-anchor='middle'>P</text></svg>" alt="Player Avatar" class="profile-avatar" id="lobbyAvatar">
+                        <span class="level-badge" id="lobbyLevel">Lv.1</span>
+                    </div>
+                    <div class="profile-details">
+                        <div class="profile-name" id="lobbyPlayerName">Player 1</div>
+                        <div class="xp-bar-container">
+                            <div class="xp-bar-fill" id="lobbyXpFill" style="width: 20%;"></div>
+                        </div>
+                    </div>
+                    <div class="currency-container">
+                        <div class="coin-widget">
+                            <span class="coin-icon">ðŸª™</span>
+                            <span class="coin-value" id="lobbyCoins">1,000</span>
+                        </div>
+                        <div class="trophy-widget">
+                            <span class="trophy-icon">ðŸ†</span>
+                            <span class="trophy-value" id="lobbyTrophies">0</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <main class="lobby-content">
+                <!-- LOBBY NAVIGATION TABS (Miniclip-Style) -->
+                <div class="lobby-navigation-tabs">
+                    <button class="tab-btn active" id="tabBtnRooms">
+                        <span class="tab-icon">ðŸŸï¸</span> Play Rooms
+                    </button>
+                    <button class="tab-btn" id="tabBtnShop">
+                        <span class="tab-icon">ðŸŽ±</span> Cue Shop
+                    </button>
+                    <button class="tab-btn" id="tabBtnPractice">
+                        <span class="tab-icon">ðŸŽ¯</span> Practice Mode
+                    </button>
+                </div>
+
+                <!-- PLAY ROOMS TAB CONTENT -->
+                <div class="tab-pane active" id="tabContentRooms">
+                    <div class="scrolling-rooms-wrapper">
+                        <button class="scroll-arrow scroll-left" id="slideLeft">â—€</button>
+                        <div class="scrolling-rooms-list" id="roomsListContainer">
+                            <!-- Populated dynamically by JS (London, Islamabad, Mumbai, Brasilia, New York, Tokyo, Nagasaki) -->
+                        </div>
+                        <button class="scroll-arrow scroll-right" id="slideRight">â–¶</button>
+                    </div>
+                </div>
+
+                <!-- CUE SHOP TAB CONTENT -->
+                <div class="tab-pane" id="tabContentShop" style="display: none;">
+                    <div class="shop-content-panel glass-effect">
+                        <div class="shop-subheader-row">
+                            <div class="shop-category-tabs">
+                                <button class="shop-cat-btn active" id="btnShopCatStandard">Standard Shop</button>
+                                <button class="shop-cat-btn" id="btnShopCatLegendary">Legendary Cues</button>
+                            </div>
+                            <div class="shop-wallet">
+                                <span>Balance:</span>
+                                <span class="coin-value" id="shopCoinsMain">ðŸª™ 1,000</span>
+                            </div>
+                        </div>
+                        <div class="cue-cards-grid-main" id="cueCardsGridMain">
+                            <!-- Cards will be populated dynamically by JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- OFFLINE PRACTICE TAB CONTENT -->
+                <div class="tab-pane" id="tabContentPractice" style="display: none;">
+                    <div class="practice-modes-grid">
+                        <div class="mode-card card-hover-effect" id="modePractice">
+                            <div class="card-icon">ðŸŽ¯</div>
+                            <h3>Practice Table</h3>
+                            <p>Sharpen your aim, practice trick shots, and master ball spins with no stakes. (8-Ball rules)</p>
+                            <button class="btn btn-primary" id="btnPlayPractice">Practice Solo</button>
+                        </div>
+
+                        <div class="mode-card card-hover-effect" id="modeVS">
+                            <div class="card-icon">âš¡</div>
+                            <h3>Pass & Play</h3>
+                            <p>Play with standard 8-ball rules against a friend on the same device.</p>
+                            <button class="btn btn-primary" id="btnPlayPassPlay">Play Local PvP</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lobby-footer-actions">
+                    <button class="btn btn-outline" id="btnResetStats">
+                        <span class="btn-icon">ðŸ”„</span> Reset Stats
+                    </button>
+                </div>
+            </main>
+        </section>
+
+        <!-- GAME AREA SCREEN -->
+        <section id="gameScreen" class="screen">
+            <!-- GAME HUD -->
+            <header class="game-hud">
+                <div class="player-panel left-player" id="hudPlayer1">
+                    <div class="avatar-ring">
+                        <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%236c5ce7'/><text x='50' y='60' font-size='35' font-family='sans-serif' font-weight='bold' fill='white' text-anchor='middle'>P1</text></svg>" alt="Player 1" class="hud-avatar">
+                        <svg class="timer-ring-svg" viewBox="0 0 36 36">
+                            <path class="ring-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            <path class="ring-fill" id="timerP1" stroke-dasharray="100, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        </svg>
+                    </div>
+                    <div class="hud-details">
+                        <div class="hud-name" id="nameP1">Player 1</div>
+                        <div class="hud-ball-badge" id="badgeP1">
+                            <span class="badge-text">Solids</span>
+                            <div class="ball-preview-row" id="ballsP1"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="match-info-panel">
+                    <button class="btn btn-icon-only btn-quit" id="btnLeaveGame" title="Quit Match">âœ–</button>
+                    <div class="match-pot" id="matchPotContainer">
+                        <span class="pot-label">POT VALUE</span>
+                        <span class="pot-amount" id="matchPot">ðŸª™ 0</span>
+                    </div>
+                    <div class="game-status-toast" id="statusMessage">Game Started! Break shot.</div>
+                </div>
+
+                <div class="player-panel right-player" id="hudPlayer2">
+                    <div class="hud-details">
+                        <div class="hud-name" id="nameP2">Cyber-Bot</div>
+                        <div class="hud-ball-badge" id="badgeP2">
+                            <span class="badge-text">Stripes</span>
+                            <div class="ball-preview-row" id="ballsP2"></div>
+                        </div>
+                    </div>
+                    <div class="avatar-ring">
+                        <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23fdcb6e'/><text x='50' y='60' font-size='35' font-family='sans-serif' font-weight='bold' fill='white' text-anchor='middle'>B</text></svg>" alt="Player 2" class="hud-avatar" id="avatarP2">
+                        <svg class="timer-ring-svg" viewBox="0 0 36 36">
+                            <path class="ring-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            <path class="ring-fill" id="timerP2" stroke-dasharray="100, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        </svg>
+                    </div>
+                </div>
+            </header>
+
+            <!-- ARENA -->
+            <main class="game-arena">
+                <!-- POWER METER (Miniclip-Style Slider) -->
+                <div class="power-meter-container">
+                    <div class="power-meter-track">
+                        <div class="power-meter-fill" id="powerFill"></div>
+                        <div class="power-meter-handle" id="powerHandle"></div>
+                    </div>
+                    <span class="meter-label">POWER</span>
+                </div>
+
+                <!-- CANVAS TABLE WRAPPER -->
+                <div class="table-canvas-wrapper" id="canvasWrapper">
+                    <canvas id="gameCanvas" width="960" height="540"></canvas>
+                </div>
+
+                <!-- SIDEBAR TOOLS (Spin Controller, Current Cue Stick Info) -->
+                <aside class="sidebar-controls">
+                    <!-- Spin Indicator (Cue Ball Grid) -->
+                    <div class="spin-selector-panel">
+                        <span class="control-label">SPIN CONTROL</span>
+                        <div class="spin-pad" id="spinPad">
+                            <div class="spin-grid-bg"></div>
+                            <div class="spin-cueball">
+                                <div class="spin-marker" id="spinMarker"></div>
+                            </div>
+                        </div>
+                        <span class="spin-feedback" id="spinFeedback">No spin</span>
+                        <button class="btn btn-small" id="btnResetSpin">Reset Spin</button>
+                    </div>
+
+                    <!-- Equipped Cue Info -->
+                    <div class="equipped-cue-card">
+                        <span class="control-label">EQUIPPED CUE</span>
+                        <div class="equipped-cue-name" id="hudCueName">Standard Cue</div>
+                        <div class="cue-stat-row">
+                            <span>Power:</span>
+                            <div class="stat-bar"><div class="stat-fill" id="statCuePower" style="width: 40%"></div></div>
+                        </div>
+                        <div class="cue-stat-row">
+                            <span>Aim:</span>
+                            <div class="stat-bar"><div class="stat-fill" id="statCueAim" style="width: 30%"></div></div>
+                        </div>
+                        <div class="cue-stat-row">
+                            <span>Spin:</span>
+                            <div class="stat-bar"><div class="stat-fill" id="statCueSpin" style="width: 25%"></div></div>
+                        </div>
+                    </div>
+                </aside>
+            </main>
+        </section>
+
+        <!-- SHOP & CUES MODAL -->
+        <div id="shopModal" class="modal">
+            <div class="modal-content glass-effect">
+                <header class="modal-header">
+                    <h2>ðŸŽ± Vortex Cue Emporium</h2>
+                    <button class="close-btn" id="btnCloseShop">âœ–</button>
+                </header>
+                <div class="shop-balance-row">
+                    <span>Available Balance:</span>
+                    <span class="coin-value"><span class="coin-icon">ðŸª™</span> <span id="shopCoins">1,000</span></span>
+                </div>
+                <div class="cue-cards-grid" id="cueCardsGrid">
+                    <!-- Cards will be populated dynamically by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- GAME OVER MODAL -->
+        <div id="gameOverModal" class="modal">
+            <div class="modal-content gameOver-content glass-effect">
+                <div class="match-result-badge" id="resultHeader">VICTORY!</div>
+                <h2 id="resultSubtitle">You defeated Cyber-Bot</h2>
+                <hr class="modal-divider">
+                <div class="reward-breakdown">
+                    <div class="reward-item">
+                        <span class="reward-icon">ðŸª™</span>
+                        <span class="reward-label">Coins Won</span>
+                        <span class="reward-val" id="rewardCoins">+100</span>
+                    </div>
+                    <div class="reward-item">
+                        <span class="reward-icon">â­</span>
+                        <span class="reward-label">XP Gained</span>
+                        <span class="reward-val" id="rewardXp">+75</span>
+                    </div>
+                </div>
+                <div class="player-progress-card">
+                    <div class="progress-details">
+                        <span class="progress-level-label" id="rewardLevelText">Level 1</span>
+                        <span class="progress-xp-text" id="rewardXpText">150 / 500 XP</span>
+                    </div>
+                    <div class="xp-bar-container large-bar">
+                        <div class="xp-bar-fill" id="rewardXpFill" style="width: 30%;"></div>
+                    </div>
+                </div>
+                <button class="btn btn-accent btn-large" id="btnRewardCollect">Claim & Return</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Source Imports -->
+    <script defer src="app.js"></script>
+
+    <!-- Visual On-Screen Diagnostic Logger -->
+    <div id="diagnosticLog" style="position: absolute; bottom: 8px; left: 8px; background: rgba(10, 11, 20, 0.9); color: #00ffd2; font-family: monospace; font-size: 10px; padding: 6px 12px; border: 1px solid rgba(0, 255, 210, 0.3); border-radius: 6px; z-index: 10000; max-width: 320px; pointer-events: none; box-shadow: 0 4px 15px rgba(0,0,0,0.5);">
+        ðŸŸ¢ Diagnostic Log: Ready
+    </div>
+    <script>
+        window.addEventListener('error', function(event) {
+            const diag = document.getElementById('diagnosticLog');
+            if (diag) {
+                diag.style.color = '#ff3838';
+                diag.style.borderColor = 'rgba(255, 56, 56, 0.5)';
+                diag.style.background = 'rgba(30, 10, 10, 0.95)';
+                diag.innerText = 'âŒ Error: ' + event.message + '\nFile: ' + (event.filename || 'app.js').split('/').pop() + ':' + event.lineno;
+            }
+        });
+    </script>
+</body>
+</html>
+
